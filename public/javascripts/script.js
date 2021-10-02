@@ -21,8 +21,6 @@ function loadLaunches() {
 }
 
 async function loadPlanets() {
-  console.log('loadPlanets');
-
   await fetch("/planets", {
     method: "GET",
   })
@@ -40,8 +38,6 @@ async function loadPlanets() {
 }
 
 function loadPlanets2() {
-  console.log('loadPlanets2');
-
   fetch("/planets")
   .then((planetsResponse) => planetsResponse.json())
   .then((planets)=>{

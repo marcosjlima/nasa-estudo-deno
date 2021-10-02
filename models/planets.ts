@@ -1,10 +1,10 @@
-import { join, BufReader, parse, _ } from "../deps.ts";
+import { log, join, BufReader, parse, _ } from "../deps.ts";
 
 type Planet = Record<string, string>;
 
 let planets = Array<Planet>();
 
-export function filterHabitablePlanets(planets: Array<Planet>){
+export function filterHabitablePlanets(planets: Array<Planet>) {
   return planets.filter((planet) => {
     const planetaryRadius = Number(planet["koi_prad"]);
     const stellarMass = Number(planet["koi_smass"]);
@@ -23,7 +23,7 @@ async function loadPlanetData() {
   const path = join("data", "kepler_exoplanets_nasa.csv");
   const file = await Deno.open(path);
   const bufReader = new BufReader(file);
- 
+
   const result = await parse(bufReader, {
     skipFirstRow: true,
     comment: "#",
@@ -35,12 +35,12 @@ async function loadPlanetData() {
 
   return planets.map((planet) => {
     return _.pick(planet, [
-      "koi_prad", 
-      "koi_smass", 
-      "koi_srad", 
-      "kepler_name", 
-      "koi_steff", 
-      "koi_count", 
+      "koi_prad",
+      "koi_smass",
+      "koi_srad",
+      "kepler_name",
+      "koi_steff",
+      "koi_count",
       "koi_period"
     ]);
   });
@@ -48,8 +48,8 @@ async function loadPlanetData() {
 
 planets = await loadPlanetData();
 
-console.log(`${planets.length} habitable planets found!`);
+log.info(`${planets.length} habitable planets found!`);
 
-export function getAllPlanets(){
+export function getAllPlanets() {
   return planets;
 }
