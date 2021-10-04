@@ -50,6 +50,6 @@ planets = await loadPlanetData();
 
 log.info(`${planets.length} habitable planets found!`);
 
-export function getAllPlanets() {
+export function getAll() {
   return planets;
 }
