@@ -1,4 +1,4 @@
-import { log, _ } from "../deps.ts";
+import { log, flatMap } from "../deps.ts";
 
 interface Launch {
     flightNumber: number;
@@ -9,7 +9,7 @@ interface Launch {
     upcoming: boolean;
     success?: boolean;
     target?: string;
-  }
+}
 
 const launches = new Map<number, Launch>();
 
@@ -29,7 +29,7 @@ export async function downloadLaunchData() {
 
     for (const launch of launchData) {
         const payloads = launch["rocket"]["second_stage"]["payloads"];
-        const customers = _.flatMap(payloads, (payload: any) => {
+        const customers = flatMap(payloads, (payload: any) => {
             return payload["customers"];
         });
 
@@ -60,13 +60,21 @@ export function getById(id: number) {
     return launches.get(id);
 }
 
-export function add(data: Launch)
-{
+export function add(data: Launch) {
     launches.set(
-        data.flightNumber, 
+        data.flightNumber,
         Object.assign(data, {
             upcoming: true,
             customers: ["Zero to Mastery", "NASA"],
         }),
     );
+}
+
+export function deleteById(id: number) {
+    const launch = launches.get(id);
+    if (launch) {
+        launch.success = false;
+        launch.upcoming = false;
+    }
+    return launch;
 }

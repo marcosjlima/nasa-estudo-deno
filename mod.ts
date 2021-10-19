@@ -6,8 +6,6 @@ import api from "./api.ts";
 const app = new Application();
 const PORT = 8000;
 
-//await setupLog();
-
 app.addEventListener("error", (event) => {
     log.error(event.error);
 });
@@ -31,6 +29,7 @@ app.use(async (ctx, next) => {
     await next();
     const delta = Date.now() - start;
     ctx.request.headers.set("X-Response-Time", `${delta}`);
+    //ctx.response.headers.set("X-Response-Time", `${delta}`);
 });
 
 app.use(api.routes());

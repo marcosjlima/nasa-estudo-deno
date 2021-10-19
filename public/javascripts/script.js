@@ -1,4 +1,4 @@
-//let launches;
+// @ts-nocheck
 let launches = [];
 
 const numberHeading = "No.".padStart(5);
@@ -15,50 +15,44 @@ function initValues() {
   launchDaySelector.setAttribute("value", today);
 }
 
+function catchError(exception, msg) {
+  let error = `${msg} - ${exception}`;
+  throw new Error(error);
+}
+
 function loadLaunches() {
-  // TODO: Once API is ready.
-  // Load launches and sort by flight number.
+  return fetch("/launches")
+    .then((launchesResponse) => launchesResponse.json())
+    .then((fetchedLaunches) => {
+      launches = fetchedLaunches.sort((a, b) => {
+        return a.flightNumber < b.flightNumber;
+      });
+    });
 }
 
 async function loadPlanets() {
   await fetch("/planets", {
     method: "GET",
   })
-  .then((response) => response.json())
-  .then((planets) =>{
-    const planetSelector = document.getElementById("planets-selector");
-    planets.forEach((planet) => {
-      planetSelector.innerHTML += `<option value="${planet.kepler_name}">${planet.kepler_name}</option>`;
+    .then((response) => response.json())
+    .then((planets) => {
+      const planetSelector = document.getElementById("planets-selector");
+      planets.forEach((planet) => {
+        planetSelector.innerHTML += `<option value="${planet.kepler_name}">${planet.kepler_name}</option>`;
+      });
+    })
+    .catch((error) => {
+      catchError(error, 'Problem downloading launch data');
     });
-  })
-  .catch((error)=>{
-    catchError(error, 'Problem downloading launch data');
-  });
-
 }
 
-function loadPlanets2() {
-  fetch("/planets")
-  .then((planetsResponse) => planetsResponse.json())
-  .then((planets)=>{
-    const planetSelector = document.getElementById("planets-selector");
-    planets.forEach((planet) => {
-      planetSelector.innerHTML += `<option value="${planet.kepler_name}">${planet.kepler_name}</option>`;
+async function abortLaunch(id) {
+  await fetch(`/launches/${id}`, { method: "DELETE" })
+    .then(loadLaunches)
+    .then(listUpcoming)
+    .catch((error) => {
+      catchError(error, 'Problem abort launch!');
     });
-  })
-  .catch((error)=>{
-    catchError(error, 'Problem downloading launch data');
-  });
-}
-
-function catchError(exception, msg){
-  let error = `${msg} - ${exception}`;
-  throw new Error(error);
-}
-
-function abortLaunch() {
-  // TODO: Once API is ready.
-  // Delete launch and reload launches.
 }
 
 function submitLaunch() {
@@ -66,12 +60,9 @@ function submitLaunch() {
   const launchDate = new Date(document.getElementById("launch-day").value);
   const mission = document.getElementById("mission-name").value;
   const rocket = document.getElementById("rocket-name").value;
-  //const flightNumber = launches[launches.length - 1].flightNumber + 1;
-    const flightNumber = launches[launches.length - 1]?.flightNumber + 1 || 1;
+  const flightNumber = launches[launches.length - 1]?.flightNumber + 1 || 1;
 
-  // TODO: Once API is ready.
-  // Submit above data to launch system and reload launches.    
-  const customers = [ "NASA", "ZTM" ];
+  const customers = ["NASA", "ZTM"];
   launches.push({
     target,
     launchDate: launchDate / 1000,

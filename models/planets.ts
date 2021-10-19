@@ -1,4 +1,4 @@
-import { log, join, BufReader, parse, _ } from "../deps.ts";
+import { log, join, BufReader, parse, pick } from "../deps.ts";
 
 type Planet = Record<string, string>;
 
@@ -34,7 +34,7 @@ async function loadPlanetData() {
   const planets = filterHabitablePlanets(result as Array<Planet>);
 
   return planets.map((planet) => {
-    return _.pick(planet, [
+    return pick(planet, [
       "koi_prad",
       "koi_smass",
       "koi_srad",

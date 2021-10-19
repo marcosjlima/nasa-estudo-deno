@@ -1,4 +1,4 @@
-import { assertEquals, assertNotEquals } from "../deps.ts";
+import { assertEquals, assertNotEquals } from "../test_deps.ts";
 
 import { filterHabitablePlanets } from "../models/planets.ts";
 
