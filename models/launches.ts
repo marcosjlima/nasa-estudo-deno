@@ -1,4 +1,4 @@
-import { log, flatMap } from "../deps.ts";
+import { log, flatMap } from "../src/deps.ts";
 
 interface Launch {
     flightNumber: number;
