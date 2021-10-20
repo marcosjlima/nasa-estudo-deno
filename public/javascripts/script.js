@@ -55,23 +55,38 @@ async function abortLaunch(id) {
     });
 }
 
-function submitLaunch() {
+async function submitLaunch() {
   const target = document.getElementById("planets-selector").value;
   const launchDate = new Date(document.getElementById("launch-day").value);
   const mission = document.getElementById("mission-name").value;
   const rocket = document.getElementById("rocket-name").value;
-  const flightNumber = launches[launches.length - 1]?.flightNumber + 1 || 1;
+  const flightNumber = launches.length + 1 || 1;
 
   const customers = ["NASA", "ZTM"];
-  launches.push({
-    target,
-    launchDate: launchDate / 1000,
+
+  const body = {
+    flightNumber,
     mission,
     rocket,
-    flightNumber,
-    customers,
+    launchDate: launchDate / 1000,
     upcoming: true,
+    customers,
+    target
+  };
+
+  const headers = new Headers({
+    "Content-Type": "application/json"
   });
+
+  await fetch(`/launches`, {
+    method: "POST",
+    headers: headers,
+    body: JSON.stringify(body)
+  })
+    .catch((error) => {
+      catchError(error, 'Problem abort launch!');
+    });
+
   document.getElementById("launch-success").hidden = false;
 }
 
