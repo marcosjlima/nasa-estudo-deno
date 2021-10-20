@@ -28,8 +28,7 @@ app.use(async (ctx, next) => {
     const start = Date.now();
     await next();
     const delta = Date.now() - start;
-    ctx.request.headers.set("X-Response-Time", `${delta}`);
-    //ctx.response.headers.set("X-Response-Time", `${delta}`);
+    ctx.response.headers.set("X-Response-Time", `${delta}ms`);
 });
 
 app.use(api.routes());
