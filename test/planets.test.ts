@@ -1,5 +1,4 @@
 import { assertEquals, assertNotEquals } from "../test_deps.ts";
-
 import { filterHabitablePlanets } from "../models/planets.ts";
 
 const HABITABLE_PLANET = {
