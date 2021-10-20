@@ -14,7 +14,7 @@ interface Launch {
 const launches = new Map<number, Launch>();
 
 export async function downloadLaunchData() {
-    log.info("Downloading launch data...");
+    //log.info("Downloading launch data...");
 
     const response = await fetch("https://api.spacexdata.com/v3/launches", {
         method: "GET",
@@ -45,7 +45,7 @@ export async function downloadLaunchData() {
 
         launches.set(flightData.flightNumber, flightData);
 
-        log.info(JSON.stringify(flightData));
+        //log.info(JSON.stringify(flightData));
     }
 }
 
